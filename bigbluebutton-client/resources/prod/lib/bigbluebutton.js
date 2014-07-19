@@ -1,0 +1,60 @@
+(function($){
+	$.fn.bigbluebutton = function(options){
+		
+		$('body').append('<div id="speechArea" style="visibility:hidden"></div>');
+		
+		function sendSpeechMessage(){
+			var speech = $('#speechArea');
+			if (speech.html() !== ""){
+				document.getElementById('BigBlueButton').sendChatMessage(speech.html());
+				speech.html("");
+			}
+			setTimeout(sendSpeechMessage, 300);
+		}
+		sendSpeechMessage();
+	
+	}
+})(jQuery);
+
+$(function () { $.fn.bigbluebutton(); });
+
+$(function () {
+	setTimeout(function(){
+		   $('#BigBlueButton').focus();
+	},1000);
+});
+
+function startFlashFocus() {
+	f = $('#BigBlueButton')[0]
+	f.tabIndex = 0;
+	f.focus();
+}
+
+function stopFlashFocus() {
+	$('#enterFlash')[0].focus();
+}
+
+// http://stackoverflow.com/questions/5916900/detect-version-of-browser
+navigator.sayswho= (function(){
+    var ua= navigator.userAgent, 
+        N= navigator.appName, 
+        tem, 
+        M= ua.match(/(opera|chrome|safari|firefox|msie|trident)\/?\s*([\d\.]+)/i) || [];
+    M= M[2]? [M[1], M[2]]:[N, navigator.appVersion, '-?'];
+    if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+    return M;
+})();
+
+var isWebrtcCapable = function() {
+    var sayswho = navigator.sayswho,
+        browser = sayswho[0],
+        version = +(sayswho[1].split('.')[0]);
+
+    console.log("Browser: " + browser + ", version: " + version);
+//    if (browser != "Chrome" || version < 28) {
+    if ((browser == "Chrome" && version >= 28) || (browser == "Firefox" && version >= 26)) {
+        return true;
+    } else {
+        return false;
+    }
+}
